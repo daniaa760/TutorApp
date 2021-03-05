@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "971696053031",
+    "project_id": "tutorapp-e8dca",
+    "storage_bucket": "tutorapp-e8dca.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:971696053031:android:bd9820373d2558c503a702",
+        "android_client_info": {
+          "package_name": "com.example.tutorapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "971696053031-mhieomuqj1bfn127pn62g6q5lhe8814f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAzg1SeldpuKQXQzLBl9RArYb0yLBsgMhs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "971696053031-mhieomuqj1bfn127pn62g6q5lhe8814f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
