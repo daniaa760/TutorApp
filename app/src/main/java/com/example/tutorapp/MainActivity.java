@@ -17,12 +17,13 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private TextView signUp;
     private EditText etEmail, etPassword;
-    private Button bnSignIn;
+    private TextView bnSignIn;
 
     private FirebaseAuth mAuth;
     private ProgressBar progressBar;
@@ -39,6 +40,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         etPassword = (EditText)findViewById(R.id.etPassword);
 
         bnSignIn = (Button)findViewById(R.id.bnSignIn);
+        bnSignIn.setOnClickListener(this);
+
         progressBar = (ProgressBar)findViewById(R.id.progressBar);
 
         mAuth = FirebaseAuth.getInstance();
@@ -53,6 +56,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             case R.id.bnSignIn:
                 userLogin();
+                break;
         }
     }
 
@@ -66,7 +70,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return;
         }
 
-        if(Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+        if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
             etEmail.setError("Please enter a valid email");
             etEmail.requestFocus();
             return;
@@ -90,7 +94,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
-                    startActivity(new Intent(MainActivity.this, ProfileActivity.class));
+                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+                    if(user.isEmailVerified()){
+                        startActivity(new Intent(MainActivity.this, ProfileActivity.class));
+                    }
+                    else{
+                        user.sendEmailVerification();
+                        Toast.makeText(MainActivity.this, "Check your email to verify your account", Toast.LENGTH_LONG).show();
+                    }
+                   // startActivity(new Intent(MainActivity.this, ProfileActivity.class));
                 }
                 else{
                     Toast.makeText(MainActivity.this, "Failed to login, please check credentials!", Toast.LENGTH_LONG).show();

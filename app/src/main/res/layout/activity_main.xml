@@ -77,7 +77,7 @@
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyleLarge"
         android:layout_centerInParent="true"
-        android:visibility="invisible"
+        android:visibility="gone"
         tools:ignore="MissingConstraints"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
