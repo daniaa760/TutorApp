@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private TextView signUp;
     private EditText etEmail, etPassword;
-    private TextView bnSignIn;
+    private TextView bnSignIn, tvForgotPassword;
 
     private FirebaseAuth mAuth;
     private ProgressBar progressBar;
@@ -43,6 +43,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         bnSignIn.setOnClickListener(this);
 
         progressBar = (ProgressBar)findViewById(R.id.progressBar);
+
+        tvForgotPassword = (TextView)findViewById(R.id.tvForgotPassword);
 
         mAuth = FirebaseAuth.getInstance();
     }
@@ -103,7 +105,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         user.sendEmailVerification();
                         Toast.makeText(MainActivity.this, "Check your email to verify your account", Toast.LENGTH_LONG).show();
                     }
-                   // startActivity(new Intent(MainActivity.this, ProfileActivity.class));
                 }
                 else{
                     Toast.makeText(MainActivity.this, "Failed to login, please check credentials!", Toast.LENGTH_LONG).show();
