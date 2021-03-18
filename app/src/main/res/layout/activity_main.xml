@@ -52,9 +52,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/bnSignIn"
-        android:textSize="16sp"
         android:layout_marginLeft="140dp"
-        android:text="Forgot Password?" />
+        android:layout_marginTop="14dp"
+        android:text="Forgot Password?"
+        android:textSize="16sp" />
 
     <TextView
         android:id="@+id/tvRegister"
