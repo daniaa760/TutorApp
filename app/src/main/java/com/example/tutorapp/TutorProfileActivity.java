@@ -137,7 +137,10 @@ public class TutorProfileActivity extends AppCompatActivity {
     }
 
     private void UpdateProfile() {
+        Tutor tutor = new Tutor();
+        tutor.setBio(bio);
         bio = etBio.getText().toString();
+
         classes = etClasses.getText().toString();
 
         HashMap<String, String> profileMap = new HashMap<>();

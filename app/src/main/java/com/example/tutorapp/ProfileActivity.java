@@ -8,6 +8,8 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -104,9 +106,38 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if(item.getItemId() == R.id.search_tutors){
+            Intent intent = new Intent(ProfileActivity.this, SearchTutorsActivity.class);
+            startActivity(intent);
+        }
+        else if(item.getItemId() == R.id.user_profile){
+            Toast.makeText(ProfileActivity.this, "Error", Toast.LENGTH_LONG).show();
+        }
+        else if(item.getItemId() == R.id.logout){
+            Intent intent = new Intent(ProfileActivity.this, MainActivity.class);
+            startActivity(intent);
+        }
+        else if (item.getItemId() == R.id.chat){
+            Intent intent = new Intent (ProfileActivity.this, ChatsActivity.class);
+            startActivity(intent);
+        }
+        return true;
+    }
+
     private void RetrieveUserInfo() {
         bio = etBio.getText().toString();
         classes = etClasses.getText().toString();
+
+        Tutor tutor = new Tutor();
+        tutor.setBio(bio);
 
         reference.child(userID).addValueEventListener(new ValueEventListener() {
             @Override
