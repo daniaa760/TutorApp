@@ -39,13 +39,24 @@
 
     <Button
         android:id="@+id/bnSignIn"
-        android:layout_width="380dp"
+        android:layout_width="170dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/etPassword"
         android:textStyle="bold"
         android:layout_marginTop="30dp"
         android:layout_marginLeft="16dp"
-        android:text="Login" />
+        android:text="Student Login" />
+
+    <Button
+        android:id="@+id/bnTutorSignIn"
+        android:layout_width="170dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etPassword"
+        android:layout_toRightOf="@id/bnSignIn"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="30dp"
+        android:text="Tutor Login"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/tvForgotPassword"

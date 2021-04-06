@@ -36,7 +36,7 @@ import java.util.UUID;
 
 import static java.security.AccessController.getContext;
 
-public class ProfileActivity extends AppCompatActivity {
+public class TutorProfileActivity extends AppCompatActivity {
 
     private ImageView ivProfileImage;
     public Uri imageUri;
@@ -61,7 +61,7 @@ public class ProfileActivity extends AppCompatActivity {
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
 
-        reference = FirebaseDatabase.getInstance().getReference("Users");
+        reference = FirebaseDatabase.getInstance().getReference("Tutors");
         userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         ivProfileImage.setOnClickListener(new View.OnClickListener() {
@@ -86,7 +86,7 @@ public class ProfileActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                 // create a user object
-                User userProfile = snapshot.getValue(User.class);
+                Tutor userProfile = snapshot.getValue(Tutor.class);
 
                 if (userProfile != null) {
                     // a user has these attributes
@@ -94,7 +94,6 @@ public class ProfileActivity extends AppCompatActivity {
                     lastName = userProfile.lastName;
                     email = userProfile.email;
                 }
-
             }
 
             @Override
@@ -200,7 +199,7 @@ public class ProfileActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         pd.dismiss();
-                        Toast.makeText(getApplicationContext(), "Image Uploaded.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Uploaded successfully.", Toast.LENGTH_LONG).show();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

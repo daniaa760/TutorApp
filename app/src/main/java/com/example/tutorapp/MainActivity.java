@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
@@ -22,12 +23,14 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private TextView signUp;
     private EditText etEmail, etPassword;
-    private TextView bnSignIn, tvForgotPassword;
+    private TextView bnSignIn, tvForgotPassword, bnTutorSignIn;
 
     private FirebaseAuth mAuth;
     private ProgressBar progressBar;
@@ -46,6 +49,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         bnSignIn = (Button)findViewById(R.id.bnSignIn);
         bnSignIn.setOnClickListener(this);
 
+        bnTutorSignIn = (Button)findViewById(R.id.bnTutorSignIn);
+        bnTutorSignIn.setOnClickListener(this);
+
         progressBar = (ProgressBar)findViewById(R.id.progressBar);
 
         tvForgotPassword = (TextView)findViewById(R.id.tvForgotPassword);
@@ -58,17 +64,72 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch(v.getId()){
             case R.id.tvSignUp:
-                startActivity(new Intent(this, RegisterActivity.class));
+                startActivity(new Intent(this, ChoiceActivity.class));
                 break;
 
             case R.id.bnSignIn:
                 userLogin();
                 break;
 
+            case R.id.bnTutorSignIn:
+                teacherLogin();
+                break;
+
             case R.id.tvForgotPassword:
                 forgotPass(v);
                 break;
         }
+    }
+
+    private void teacherLogin() {
+        String email = etEmail.getText().toString().trim();
+        String password = etPassword.getText().toString().trim();
+
+        if(email.isEmpty()){
+            etEmail.setError("Email is required");
+            etEmail.requestFocus();
+            return;
+        }
+
+        if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+            etEmail.setError("Please enter a valid email");
+            etEmail.requestFocus();
+            return;
+        }
+
+        if(password.isEmpty()){
+            etPassword.setError("Password is required");
+            etPassword.requestFocus();
+            return;
+        }
+
+        if(password.length() < 6){
+            etPassword.setError("Password must be at least six characters");
+            etPassword.requestFocus();
+            return;
+        }
+
+        progressBar.setVisibility(View.VISIBLE);
+
+        mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if(task.isSuccessful()){
+                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+                    if(user.isEmailVerified()){
+                        startActivity(new Intent(MainActivity.this, TutorProfileActivity.class));
+                    }
+                    else{
+                        user.sendEmailVerification();
+                        Toast.makeText(MainActivity.this, "Check your email to verify your account", Toast.LENGTH_LONG).show();
+                    }
+                }
+                else{
+                    Toast.makeText(MainActivity.this, "Failed to login, please check credentials!", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
     }
 
     private void userLogin() {

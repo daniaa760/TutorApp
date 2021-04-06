@@ -20,7 +20,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class RegisterActivity extends AppCompatActivity implements View.OnClickListener{
+public class TutorRegister extends AppCompatActivity implements View.OnClickListener{
 
     private FirebaseAuth mAuth;
     private EditText etFirstName, etLastName, etEmail, etPassword;
@@ -31,7 +31,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register);
+        setContentView(R.layout.activity_tutorregister);
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -51,14 +51,14 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
     @Override
     public void onClick(View v) {
-    switch(v.getId()){
-        case R.id.logo:
-            startActivity(new Intent(this,MainActivity.class));
-            break;
-        case R.id.btnSignup:
+        switch(v.getId()){
+            case R.id.logo:
+                startActivity(new Intent(this,MainActivity.class));
+                break;
+            case R.id.btnSignup:
                 registerUser();
                 break;
-    }
+        }
     }
 
     private void registerUser() {
@@ -67,68 +67,65 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         String firstName = etFirstName.getText().toString().trim();
         String lastName = etLastName.getText().toString().trim();
 
-        if(firstName.isEmpty()){
+        if (firstName.isEmpty()) {
             etFirstName.setError(("First Name is required"));
             etFirstName.requestFocus();
             return;
         }
-        if(lastName.isEmpty()){
+        if (lastName.isEmpty()) {
             etLastName.setError("Last name is required");
             etLastName.requestFocus();
             return;
         }
-        if(email.isEmpty()){
+        if (email.isEmpty()) {
             etEmail.setError("Email is required");
             etEmail.requestFocus();
             return;
         }
-        if(password.isEmpty()){
+        if (password.isEmpty()) {
             etPassword.setError("Password is required.");
             etPassword.requestFocus();
             return;
         }
-        if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             etEmail.setError("Please provide valid email");
             etEmail.requestFocus();
             return;
         }
-        if(password.length() < 6){
+        if (password.length() < 6) {
             etPassword.setError("Password must be at least 6 characters");
             etPassword.requestFocus();
             return;
         }
 
         progressBar.setVisibility(View.VISIBLE);
-        mAuth.createUserWithEmailAndPassword(email,password)
+        mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful()){
-                            User user = new User(firstName, lastName,email);
-                            user.userType("Student");
+                        if (task.isSuccessful()) {
+                            Tutor tutor = new Tutor(firstName, lastName, email);
 
-                            FirebaseDatabase.getInstance().getReference("Users")
+                            FirebaseDatabase.getInstance().getReference("Tutors")
                                     .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                                    .setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    .setValue(tutor).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
 
-                                    if(task.isSuccessful()){
-                                        Toast.makeText(RegisterActivity.this, "User has been registered successfully!", Toast.LENGTH_LONG).show();
+                                    if (task.isSuccessful()) {
+                                        Toast.makeText(TutorRegister.this, "User has been registered successfully!", Toast.LENGTH_LONG).show();
                                         progressBar.setVisibility(View.VISIBLE);
 
-                                        Intent intent = new Intent (RegisterActivity.this, MainActivity.class);
+                                        Intent intent = new Intent (TutorRegister.this, MainActivity.class);
                                         startActivity(intent);
-                                    }
-                                    else{
-                                        Toast.makeText(RegisterActivity.this, "Failed to register, please try again.", Toast.LENGTH_LONG).show();
+                                    } else {
+                                        Toast.makeText(TutorRegister.this, "Failed to register, please try again.", Toast.LENGTH_LONG).show();
                                         progressBar.setVisibility(View.GONE);
                                     }
                                 }
                             });
-                        }
-                        else{
-                            Toast.makeText(RegisterActivity.this, "Failed to register.", Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(TutorRegister.this, "Failed to register.", Toast.LENGTH_LONG).show();
                             progressBar.setVisibility(View.GONE);
                         }
                     }
